@@ -18,12 +18,9 @@ public class NotificationService {
     private final RabbitTemplate rabbitTemplate;
 
 
-    private final JavaMailSender mailSender;
-
     public NotificationService(NotificationRepository notificationRepository, RabbitTemplate rabbitTemplate, JavaMailSender mailSender) {
         this.notificationRepository = notificationRepository;
         this.rabbitTemplate = rabbitTemplate;
-        this.mailSender = mailSender;
     }
 
     public void sendNotification(String recipientEmail, String subject, String content) {

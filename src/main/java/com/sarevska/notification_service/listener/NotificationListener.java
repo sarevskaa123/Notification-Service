@@ -18,6 +18,6 @@ public class NotificationListener {
     @RabbitListener(queues = RabbitMQConfig.NOTIFICATION_QUEUE)
     public void receiveNotification(Notification notificationMessage) {
         // Send email when the message is received
-        notificationEmailService.sendNotification(notificationMessage.getRecipientEmail(), notificationMessage.getSubject(), notificationMessage.getContent());
+        notificationEmailService.sendEmail(notificationMessage.getRecipientEmail(), notificationMessage.getSubject(), notificationMessage.getContent());
     }
 }
