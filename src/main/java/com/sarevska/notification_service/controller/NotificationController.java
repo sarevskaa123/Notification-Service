@@ -1,6 +1,7 @@
 package com.sarevska.notification_service.controller;
 
 import com.sarevska.notification_service.service.NotificationService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,4 +21,5 @@ public class NotificationController {
         notificationService.sendNotification(recipientEmail, subject, content);
         return "Notification sent successfully!";
     }
+
 }

@@ -1,7 +1,9 @@
 package com.sarevska.notification_service.service;
 
+import com.sarevska.notification_service.config.RabbitMQConfig;
 import com.sarevska.notification_service.entity.Notification;
 import com.sarevska.notification_service.repository.NotificationRepository;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -13,10 +15,14 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
 
+    private final RabbitTemplate rabbitTemplate;
+
+
     private final JavaMailSender mailSender;
 
-    public NotificationService(NotificationRepository notificationRepository, JavaMailSender mailSender) {
+    public NotificationService(NotificationRepository notificationRepository, RabbitTemplate rabbitTemplate, JavaMailSender mailSender) {
         this.notificationRepository = notificationRepository;
+        this.rabbitTemplate = rabbitTemplate;
         this.mailSender = mailSender;
     }
 
@@ -30,11 +36,8 @@ public class NotificationService {
         // Save the notification in the database
         notificationRepository.save(notification);
 
-        // Send email notification
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(recipientEmail);
-        message.setSubject(subject);
-        message.setText(content);
-        mailSender.send(message);
+        // Send the message to the notification queue
+        rabbitTemplate.convertAndSend(RabbitMQConfig.NOTIFICATION_QUEUE, notification);
     }
+
 }
