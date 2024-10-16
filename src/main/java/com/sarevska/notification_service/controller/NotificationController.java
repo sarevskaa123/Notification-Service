@@ -1,7 +1,7 @@
 package com.sarevska.notification_service.controller;
 
+import com.sarevska.notification_service.entity.NotificationRequest;
 import com.sarevska.notification_service.service.NotificationService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,10 +15,10 @@ public class NotificationController {
     }
 
     @PostMapping("/send")
-    public String sendNotification(@RequestParam String recipientEmail,
-                                   @RequestParam String subject,
-                                   @RequestParam String content) {
-        notificationService.sendNotification(recipientEmail, subject, content);
+    public String sendNotification(@RequestBody NotificationRequest notificationRequest) {
+        notificationService.sendNotification(notificationRequest.getRecipientEmail(),
+                notificationRequest.getSubject(),
+                notificationRequest.getContent());
         return "Notification sent successfully!";
     }
 
