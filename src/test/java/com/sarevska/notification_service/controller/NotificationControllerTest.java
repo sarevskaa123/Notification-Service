@@ -32,16 +32,18 @@ public class NotificationControllerTest {
 
     @Test
     public void testSendNotification_ReturnsSuccessMessage() throws Exception {
+        // Define the JSON request body
+        String jsonRequest = "{\"recipientEmail\":\"test@example.com\",\"subject\":\"Test Subject\",\"content\":\"Test Content\"}";
+
+        // Perform POST request with JSON content
         mockMvc.perform(post("/api/notifications/send")
-                        .param("recipientEmail", "test@example.com")
-                        .param("subject", "Test Subject")
-                        .param("content", "Test Content")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .andExpect(status().isOk())
+                        .contentType(MediaType.APPLICATION_JSON) // Set Content-Type to application/json
+                        .content(jsonRequest))  // Pass the JSON request body
+                .andExpect(status().isOk())  // Expect HTTP 200 OK
                 .andExpect(content().string("Notification sent successfully!"));
 
+        // Verify that the service method was called with the correct parameters
         Mockito.verify(notificationService, Mockito.times(1))
                 .sendNotification("test@example.com", "Test Subject", "Test Content");
     }
 }
-
